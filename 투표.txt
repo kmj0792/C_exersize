@@ -1,0 +1,31 @@
+#include<stdio.h>
+#pragma warning (disable:4996)
+
+#define MAX 5
+void main()
+{
+	int ip[MAX], n, xdata = 0;
+	int i;
+	n = 0;
+	for (i = 0; i < MAX; i++)
+		ip[i] = 0;
+	printf("1~4번 중 한 후보의 번호를 입력하시오:");
+while (scanf("%d", &xdata) == 1)
+	{
+		n++;
+		if (xdata<1 || xdata>=MAX)
+		{
+			++ip[0];
+		}
+		else
+		{
+			++ip[xdata];
+		}
+		printf("1~4중 하나입력");
+	}
+	printf("\n득표수\n");
+	for (i = 1; i < MAX; i++)
+		printf("%d번 :%d", i, ip[i]);
+	printf("무효표:%d", ip[0]);
+	printf("총 투표수:%d", n);
+}

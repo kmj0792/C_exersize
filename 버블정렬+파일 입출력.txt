@@ -1,0 +1,85 @@
+#pragma warning(disable:4996)
+#include<stdio.h>
+#include<stdlib.h>//표준 라이브러리함수 사용을 위한 헤더파일
+#include<time.h>//시간 함수 사용을 위한 헤더파일
+
+
+//함수 선언
+void generate_random(int array[], int size);
+void print_array(FILE *fp, char *str, int array[], int size);
+void bubble_sort(int array[], int size);
+void swap(int *xp, int *yp);
+void bubble(int array[], int last);
+void save_data(int array[], int size);
+
+void main(void)
+{
+
+	int *data, size;
+	srand(time(NULL));
+	printf("배열의 크기를 입력하세요.");//size는 배열의 크기
+	scanf("%d", &size);
+	data = (int *)malloc(sizeof(int)*size);// 배열의 동적할당
+
+
+	generate_random(data, size);//난수 생성 함수 호출.
+	print_array(stdout, "원본", data, size);
+	bubble_sort(data, size);//버블정렬 함수 호출.
+	print_array(stdout, "정렬", data, size);
+	save_data(data, size);
+
+
+	free(data);//기억장치 해제를 위한 free();
+}
+
+void save_data(int array[], int size)
+{
+	FILE *fp;
+	fp = fopen("sorted.txt", "w");
+	if (fp != NULL)
+	{
+		print_array(fp, "정렬", array, size);
+		fclose(fp);
+	}
+}
+void generate_random(int array[], int size)//난수 생성 함수 구현.
+{
+	int n;
+	for (n = 0; n < size; n++)//n이 0부터 입력한 배열값 size보다 작을 때 까지 증가시키면서,
+		array[n] = rand() % 1000 + 1;//1부터 1000사이의 난수를 생성하여 배열에 저장.
+}
+void print_array(FILE *fp, char *str, int array[], int size)//정렬한 데이터를 출력하는 함수 구현.
+{
+	int n;
+	fprintf(fp, "%s %d\n", str, size);//배열 제목과 입력한 size값 출력.
+	for (n = 0; n < size; n++)//n=0 부터 입력한 size보다 작을 때 까지 n을 증가시키면서, 반복문 실행.
+	{
+		fprintf(fp, "%5d", array[n]);//정렬된 값 출력한다.
+		if ((n + 1) % 10 == 0)//값 10개가 출력되면,
+			fprintf(fp, "\n");//다음줄에 출력을 한다.
+	}
+	fprintf(fp, "\n");
+}
+
+void bubble_sort(int array[], int size)//bubble 함수 구현(가장 큰 원소를 뒤로 옮긴다.)
+{
+	for (int n = 0; n < size - 1; n++)
+		bubble(array, size-n-1);
+}
+
+void bubble(int array[], int last)//bubble 함수 구현.
+{
+	for (int n = 0; n < last; n++)
+	{
+		if (array[n] > array[n+1])
+			swap(&array[n], &array[n+1]);
+	}
+}
+
+void swap(int *xp, int *yp)//데이터를 교환하는 swap함수 구현.
+{
+	int temp;//값이 없는 int형 변수 temp선언. 
+	temp = *xp;//temp에 *xp값 저장.
+	*xp = *yp;//*xp에 *yp값 저장.
+	*yp = temp;//*yp에 temp값 저장. 
+}

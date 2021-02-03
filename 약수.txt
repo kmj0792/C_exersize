@@ -1,0 +1,41 @@
+#pragma warning(disable:4996)
+#include<stdio.h>
+
+void didi(int x);
+
+
+int main()
+{
+	int number;
+	while (1)
+	{
+		printf("약수를 구할 정수를 입력하세요(1 이하면 종료):");
+		scanf("%d", &number);
+		if (number > 1)
+		{
+			didi(number);
+		}
+		else {
+
+			printf("약수를 구할수 없습니다.\n");
+			printf("프로그램을 종료합니다.\n");
+			break;
+		}
+	}
+	return ;
+}
+
+void didi(int x)
+{
+	int n, remain;
+	printf("%d의 약수:", x);
+	for (n = 1; n <= x; n++)
+	{
+		remain = x % n;
+		if (remain == 0)
+			printf("%d  ", n);
+		
+	}
+	printf("\n");
+
+}

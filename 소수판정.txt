@@ -1,0 +1,44 @@
+#pragma warning(disable:4996)
+#include<stdio.h>
+#include<math.h>
+
+int thtn(int x);
+
+int main()
+{
+	int number;
+	int goal;
+	while (1)
+	{
+		printf("소수를 판정할 정수를 입력하세요:<1 이하의 수면 종료>");
+		scanf("%d", &number);
+		if (number >= 2)
+		{
+			goal=thtn(number);
+			if (goal == 0)
+				printf("%d는 소수가 아닙다", number);
+			else
+				printf("%d는 소수입니다.", number);
+		}
+		else
+		{
+			printf("소수를 판정 못함");
+			break;
+		}
+	}
+}
+
+int thtn(int x)
+{
+	int di = 2;
+
+	int to = (int)sqrt((double)x);
+	while (di <= to)
+	{
+		if ((x%di) == 0)
+			return 0;
+		di++;
+	}
+	return 1;
+}
+	

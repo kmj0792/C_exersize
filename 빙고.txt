@@ -1,0 +1,242 @@
+//과제5_2018036029_김민정
+
+#include<stdio.h> //표준 입출력 함수 사용을 위한 헤더파일.
+#include<stdlib.h>//표준 라이브러리 함수 사용을 위한 헤더파일.
+#include<time.h>//시간 함수 사용을 위한 헤더파일.
+#define SIZE 5//SIZE를 5로 정의.
+#define SIZE2 25//SIZE2를 25로 정의.
+#pragma warning(disable:4996)
+
+
+//여러가지 함수와 변수 선언하기.
+
+void initialize1();//빙고판 초기화 함수. 반환형 없음.
+
+void set_rand(int *array);
+void set_user(int array1[SIZE2]);//사용자 빙고판을 직접 입력받기위한 함수선언.
+void swap(int *x, int *y);//X에 입력된 값과 Y에 입력된 값 교환하는 함수 선언.
+
+
+void erase_bingo(int arr[][5], int number);//빙고판에서 선택된 번호 지우는 함수선언.
+void print_bingo(int arr[][5]);//빙고판 출력하는 함수선언.
+void print_winner(int winner);//승자를 표시하는 함수선언.
+
+int get_number(int from);//번호를 선택하는 함수선언. 
+int checked[25];//전역변수 checked
+int count = 0;//전역변수 count
+
+
+int check_bingo(int arr[][5]);//사용자와 컴퓨터가 빙고를 완성했는지 검사하는 함수 선언.
+
+int ubingo[5][5];
+int cbingo[5][5];
+
+
+int main()
+{
+	int number, uwin, cwin;
+
+	initialize1();//빙고판을 초기화 하는 함수 호출.
+
+	do {
+		printf("사용자\n");
+		print_bingo(ubingo);
+		number = get_number(0);
+		erase_bingo(ubingo, number);
+		erase_bingo(cbingo, number);
+		number = get_number(1);
+		erase_bingo(ubingo, number);
+		erase_bingo(cbingo, number);
+		uwin = check_bingo(ubingo);
+		cwin = check_bingo(cbingo);
+
+	} while ((uwin == 0) && (cwin == 0));// uwin 과 cwin이 0이면 사용자 빙고판과 컴퓨터 빙고판을 화면에 띄우는것을 반복.
+
+	printf("사용자\n");
+	print_bingo(ubingo);
+	printf("컴퓨터\n");
+	print_bingo(cbingo);
+	print_winner(cwin * 2 + uwin);//cwin * 2 + uwin의 값에 따라 승자를 가림.
+
+}
+
+
+
+//여러가지 함수구현
+
+
+
+
+void initialize1() //빙고판 초기화 하는 함수 구현
+{
+	srand((unsigned int)time(NULL));//난수 생성하기
+	set_user((int *)ubingo);//사용자 빙고판 직접 입력하기위한 함수 호출.
+	set_rand((int *)cbingo);
+}
+
+void set_user(int array1[SIZE2])//사용자 빙고판을 직접입력하는 함수구현
+{
+	int i;
+
+	printf("1~25의 번호를 중복되지 않도록 입력하시오(단, 순서상관 X.) : "); //숫자 입력하기
+
+	for (i = 0; i < SIZE2; i++)// i를 0부터 SIZE2(25)까지 1씩 증가시키면서,
+	{
+		
+		scanf("%d", &array1[i]);//배열 array1에 저장하기.
+	}
+}
+
+void set_rand(int *array)//컴퓨터 빙고판을 만드는 함수 구현.
+{
+	int i;
+
+	for (i = 0; i < SIZE2; i++)//i를 0부터 25까지 1씩 증가시키면서 반복한다.
+		array[i] = i + 1;//배열에 1부터 25까지의 번호를 순서대로 받고,
+	for (i = 0; i < SIZE2; i++)
+		swap(&array[i], &array[rand() % 25]);//swap함수를 이용해 번호들의 순서를 바꾼다
+}
+
+void swap(int *x, int *y)//x의 값과 y의 값을 temp를 이용해 교환하는 함수.
+{
+	int temp;
+	temp = *x;
+	*x = *y;
+	*y = temp;
+}
+
+void print_bingo(int arr[][5]) //빙고판 출력하는 함수구현.
+{
+	int x, y;
+	for (y = 0; y < SIZE; y++)//y를 0 부터 SIZE(5)까지,
+	{
+		for (x = 0; x < SIZE; x++) //x를 0 부터 SIZE(5)까지, 1씩 증가시키면서 반복.
+		{
+			if (arr[y][x] != -1) //arr[y][x]의 값이 -1이면, XX출력.
+				printf("%5d", arr[y][x]);
+			else
+				printf(" XX");
+
+		}
+		printf("\n");
+
+	}
+}
+
+void erase_bingo(int arr[][5], int number) //number의 숫자와 빙고판 arr[][5]을 검사한다. 
+{
+	int x, y;
+
+	for (y = 0; y < SIZE; y++)//y를 0 부터 SIZE(5)까지,
+		for (x = 0; x < SIZE; x++)//x를 0 부터 SIZE(5)까지, 1씩 증가시키면서 반복한다.
+			if (arr[y][x] == number) //arr[y][x]가 number와 같으면,
+				arr[y][x] = 0;//arr[y][x]는 0.
+}
+
+
+void print_winner(int winner) //승자를 표시하는 함수구현.
+{
+	switch (winner)
+	{
+	case 1: printf("사용자가 이겼습니다.\n"); //winner = 1 >> 사용자 승리
+		break;
+
+	case 2: printf("컴퓨터가 이겼습니다.\n"); //winner = 2 >> 컴퓨터 승리
+		break;
+
+	case 3: printf("비겼습니다.\n"); //winner = 3 >> 동시 승리
+		break;
+
+	default: printf("뭔가 이상합니다.\n"); //그 외의 경우.
+		break;
+
+	}
+
+}
+int get_number(int from)
+{
+	int number;
+	int x, retry;
+
+	do {
+		retry = 0;
+		if (from == 0) //from이 0인경우,
+		{
+			printf("1~25 사이의 숫자를 입력하세요: ");//사용자로부터 1~25사이의 값을 입력받는다.
+			scanf("%d", &number);
+			if (number < 1 || number > 25) //number가 1보다 작거나 25보다 크다면
+				retry = 1; //retry가 1 >> 반복문 실행
+
+		}
+
+		else//from이 1인 경우, 
+			number = rand() % 25 + 1; //1~25사이의 난수를 생성한다.
+		if (retry == 0) {
+			for (x = 0; x < count; x++)//x를 0부터 count까지  1씩 증가시키면서
+			{
+				if (checked[x] == number)//number가 checked[x]와 같은지 확인. 같으면,
+				{
+					retry = 1;//retry가 1 >> 반복문 실행		
+
+					break;
+				}
+			}
+		}
+	} while (retry == 1);//retry가 1 이면, 다음 반복문 실행한다.
+	checked[count++] = number;
+	if (from == 0)
+		printf("사용자가 %d를 선택했습니다.\n", number);
+	else
+		printf("컴퓨터가 %d를 선택했습니다.\n", number);
+	return number;//number를 리턴한다.
+}
+
+
+int check_bingo(int arr[][5]) //번호를 선택하는 함수구현. 
+{
+	int x, y, sum;
+
+	for (y = 0; y < SIZE; y++)
+	{
+		sum = 0;
+		for (x = 0; x < SIZE; x++)
+		{
+			sum += arr[y][x];
+
+		}
+		if (sum == 0) return 1; //가로 배열 원소의 합이 0이면 빙고완성
+
+	}
+
+	for (x = 0; x < SIZE; x++)
+	{
+		sum = 0;
+		for (y = 0; y < SIZE; y++)
+		{
+			sum += arr[y][x];
+
+		}
+		if (sum == 0) return 1;//세로 배열 원소의 합이 0이면 빙고완성
+
+	}
+
+	sum = 0;
+	for (x = 0; x < SIZE; x++)
+	{
+		sum += arr[x][x];
+
+	}
+	if (sum == 0) return 1; //한 쪽 대각선 배열 원소의 합이 0이면 빙고완성
+
+	sum = 0;
+	for (x = 0; x < SIZE; x++)
+	{
+		sum += arr[x][SIZE - x - 1];
+
+	}
+	if (sum == 0) return 1;//다른 쪽 대각선 배열 원소의 합이 0이면 빙고완성
+
+					   //완성된 빙고열이 있는 경우 1을 리턴하고,
+
+	return 0;	//완성되지 않은 경우 0을 리턴한다.
+}

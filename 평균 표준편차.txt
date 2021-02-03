@@ -1,0 +1,66 @@
+#include<stdio.h>
+#include<math.h>
+
+#define NUMMAX 10
+void get_data();
+float calc_average();
+float calc_stdev(float mean);
+int n;
+float	num[NUMMAX];
+
+int main()
+{
+
+	float avg, std;
+
+	get_data();
+	avg = calc_average();
+	std = calc_stdev(avg);
+	
+
+	printf(" 평균 : %f\n", avg);
+	printf("표준편차 : %f\n", std);
+
+}
+void get_data()
+	{
+		printf("최대 10개의 실수를 입력하세요.\n");      // 안내문 출력
+		printf("입력을 종료하려면, 0 이하의 수를 입력하세요.\n\n");
+		n = 0;			// 데이터의 수를 0으로 초기화 한다.
+		while (n < 10)		// n<10이면 블록을 계속 반복한다.
+		{			// 블록 시작
+			printf("숫자 %d: ", n + 1);		// 안내문 출력
+			scanf_s("%f", &num[n]);		// 데이터 저장
+			if (num[n] > 0.0)		// 입력 받은 데이터가 0보다 크다면
+				n += 1;			// 데이터의 수를 증가시킨다.
+			else    				// 아니면
+				break;		// 반복문을 벗어난다.
+		}			// 블록 끝
+	}
+
+float calc_average()
+{
+	float sum, avg;		// 합, 평균 지역변수
+	int k;			// 반복문 제어 변수?
+	sum = 0.0;		// 합 초기화
+	for (k = 0; k < n; k++)	// k=0부터 k<n까지 k를 증가시키면서
+		sum += num[k];	// sum에 배열의 원소를 더한다.?
+	avg = sum / (float)n;	// 평균을 구한다.
+	return avg; 		// 평균을 리턴한다.
+}
+float calc_stdev(float mean)
+{
+	float ssum, diff, variance, stdev;		// 제곱 합, 차이, 분산, 표준편차
+	int k;				// 반복문 제어 변수
+
+	ssum = 0.0;			// 합을 0으로 초기화 한다.
+	for (k = 0; k < n; k++)			// 배열의 각 원소에 대하여
+	{
+		diff = num[k] - mean;		// 차이를 구하고
+		ssum = ssum + diff * diff;		// 합에 차이의 제곱을 더한다.
+	}
+	variance = ssum / (float)n;		// 분산을 구한다.
+	stdev = (float)sqrt((double)variance);	// 제곱근 함수로 표준편차를 구한다.?
+	return stdev; 			// 표준편차를 리턴한다.
+}
+

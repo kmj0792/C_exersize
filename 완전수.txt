@@ -1,0 +1,36 @@
+#pragma warning(disable:4996)
+#include<stdio.h>
+int number;
+int perfect(int x);
+
+void main()
+{
+	printf("1000이하의 완전수:\n");
+	for (number = 0; number <= 1000; number++)
+	{
+		if (perfect(number) == 1)
+			printf("%d  ", number);
+	}
+}
+
+
+int perfect(int x)
+{
+	int n;
+	int remain;
+	int sum = 0;
+	for (n = 1; n < x; n++)
+	{
+		remain = x % n;
+		if (remain == 0)
+		{
+			sum = sum + n;
+		}
+	}
+	if (sum == x)
+	{
+		return 1;
+	}
+	else
+		return 0;
+}
